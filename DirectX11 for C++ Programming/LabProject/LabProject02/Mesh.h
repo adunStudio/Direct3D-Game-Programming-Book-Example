@@ -2,6 +2,7 @@
 
 #include "Vertex.h"
 
+// 삼각형을 하나의 메시로 표현하고 렌더링하기 위한 클래스
 class CMesh
 {
 private:
