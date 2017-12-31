@@ -109,7 +109,7 @@ unsigned long CGameTimer::getFrameRate(LPTSTR lpszString, int nCharacters)
 	{
 		// 현재 프레임 레이트를 문자열로 변환하여 lpszString 버퍼에 쓰고 "FPS"와 결합한다.
 		_itow_s(m_currentFrameRate, lpszString, nCharacters, 10);
-		wcscat_s(lpszString, nCharacters, _T(" FPS"));
+		wcscat_s(lpszString, nCharacters, _T(" FPS)"));
 	}
 
 	return m_currentFrameRate;

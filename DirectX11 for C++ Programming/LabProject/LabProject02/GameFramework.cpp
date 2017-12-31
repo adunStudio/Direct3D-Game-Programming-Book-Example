@@ -22,6 +22,10 @@ CGameFramework::CGameFramework()
 
 	m_nWndClientWidth  = FRAME_BUFFER_WIDTH;
 	m_nWndClientHeight = FRAME_BUFFER_HEIGHT;
+
+	m_scene = nullptr;
+
+	_tcscpy_s(m_pszBuffer, _T("LapProject ("));
 }
 
 CGameFramework::~CGameFramework()
@@ -270,13 +274,20 @@ void CGameFramework::onProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 // 게임 프로그램에서 사용하는 객체들을 생성한다.
 void CGameFramework::buildObjects()
 {
+	m_scene = new CScene();
 
+	if (m_scene)
+		m_scene->buildObjects(m_pd3dDevice);
 }
 
 // 게임 프로그램에서 사용한 객체들을 반환한다.
 void CGameFramework::releaseObjects()
 {
+	if (m_scene)
+		m_scene->releaseObjects();
 
+	if (m_scene)
+		delete m_scene;
 }
 
 // 사용자 입력(키보드 입력과 마우스 입력)을 처리한다.
@@ -288,7 +299,8 @@ void CGameFramework::processInput()
 // 게임 객체를 이동하거나 애니메이션을 처리한다.
 void CGameFramework::animateObjects()
 {
-
+	if (m_scene)
+		m_scene->animateObjects(m_gameTimer.getTimeElapsed());
 }
 
 // Direct3D 그래픽 디바이스에 대한 그래픽 출력을 처리한다.
@@ -296,6 +308,9 @@ void CGameFramework::animateObjects()
 // 렌더링을 위한 로직을 구현한다.
 void CGameFramework::frameAdvacne()
 {
+	// 타이머의 시간이 갱신되도록 하고 프레임 레이트를 갱신한다.
+	m_gameTimer.tick();
+
 	processInput();
 	animateObjects();
 
@@ -306,4 +321,10 @@ void CGameFramework::frameAdvacne()
 
 	// 후면 버퍼를 전면 버퍼로 프리젠트한다.
 	m_pDXGISwapChain->Present(0, 0);
+
+	/*
+	m_pszBuffer 문자열이 "LapProject ("으로 초기화되었으므로 (m_pszBuffer+12)에서부터 프레임 레이트를 문자열로 출력하여 " FPS)" 문자열과 합친다.
+	*/
+	m_gameTimer.getFrameRate(m_pszBuffer + 12, 47);
+	::SetWindowText(m_hWnd, m_pszBuffer); // 현재의 프레임 레이트를 문자열로 가져와서 주 윈도우의 타이틀로 출력한다.
 }

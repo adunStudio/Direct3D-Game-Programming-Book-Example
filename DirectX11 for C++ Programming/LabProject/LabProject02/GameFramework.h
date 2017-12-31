@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Timer.h"
+#include "Scene.h"
+
 class CGameFramework
 {
 private:
@@ -56,6 +59,15 @@ private:
 
 	// 렌더 타깃 뷰 인터페이스에 대한 포인터이다.
 	ID3D11RenderTargetView* m_pd3dRenderTargetView;
+
+	// 게임 프레임워크에서 사용할 타이머다.
+	CGameTimer m_gameTimer;
+
+	// 게임의 장면(Scene)을 관리하는 객체에 대한 포인터다.
+	CScene* m_scene;
+
+	// 프레임 레이트를 주 윈도우의 캡션에 출력하기 위한 문자열이다.
+	_TCHAR  m_pszBuffer[50];
 
 public:
 	CGameFramework();
