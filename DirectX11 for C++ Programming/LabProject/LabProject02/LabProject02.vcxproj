@@ -163,8 +163,10 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="GameFramework.cpp" />
     <ClCompile Include="LabProject02.cpp" />
     <ClCompile Include="stdafx.cpp">

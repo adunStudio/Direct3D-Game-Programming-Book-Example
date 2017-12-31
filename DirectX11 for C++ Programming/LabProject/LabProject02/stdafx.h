@@ -24,3 +24,6 @@
 
 #define FRAME_BUFFER_WIDTH  640
 #define FRAME_BUFFER_HEIGHT 480
+
+#include <mmsystem.h>
+#include <math.h>
