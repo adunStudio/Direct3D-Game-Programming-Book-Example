@@ -1,6 +1,17 @@
 #pragma once
+
+#include "Object.h"
+#include "Shader.h"
+
 class CScene
 {
+private:
+	CObjectShader** m_ppShaders;
+	int m_nShaders;
+
+	CGameObject** m_ppObjects;
+	int m_nObjects;
+
 public:
 	CScene();
 	~CScene();
@@ -9,7 +20,7 @@ public:
 	bool onProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	bool onProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 
-	bool buildObjects(ID3D11Device* pd3dDevice);
+	void buildObjects(ID3D11Device* pd3dDevice);
 	void releaseObjects();
 	bool processInput();
 	void animateObjects(float timeElapsed);

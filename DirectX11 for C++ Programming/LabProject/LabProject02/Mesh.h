@@ -1,6 +1,14 @@
 #pragma once
 
-#include "Vertex.h"
+class CVertex
+{
+	D3DXVECTOR3						m_d3dxvPosition;
+public:
+	CVertex() { m_d3dxvPosition = D3DXVECTOR3(0, 0, 0); }
+	CVertex(D3DXVECTOR3 d3dxvPosition) { m_d3dxvPosition = d3dxvPosition; }
+	~CVertex() { }
+};
+
 
 // 삼각형을 하나의 메시로 표현하고 렌더링하기 위한 클래스
 class CMesh
@@ -21,7 +29,7 @@ protected:
 	D3D11_PRIMITIVE_TOPOLOGY m_d3dPrimitiveTopology;
 
 public:
-	CMesh(ID3D11Device* pd3dDevice);
+	CMesh();
 	virtual ~CMesh();
 
 	void addRef();

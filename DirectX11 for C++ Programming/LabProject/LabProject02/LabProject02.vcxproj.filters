@@ -39,13 +39,13 @@
     <ClInclude Include="Scene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,13 +65,13 @@
     <ClCompile Include="Scene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Vertex.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -87,5 +87,8 @@
     <Image Include="LabProject02.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Effect.fx" />
   </ItemGroup>
 </Project>

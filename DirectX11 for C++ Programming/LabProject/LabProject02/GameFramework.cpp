@@ -70,6 +70,20 @@ void CGameFramework::onDestroy()
 	if (m_pd3dDevice)			m_pd3dDevice->Release();
 }
 
+void CGameFramework::setViewport()
+{
+	D3D11_VIEWPORT d3dViewport;
+
+	d3dViewport.TopLeftX = 0.0f;
+	d3dViewport.TopLeftY = 0.0f;
+	d3dViewport.Width  = (float)m_nWndClientWidth;
+	d3dViewport.Height = (float)m_nWndClientHeight;
+	d3dViewport.MinDepth = 0.0f;
+	d3dViewport.MaxDepth = 1.0f;
+	
+	m_pd3dDeviceContext->RSSetViewports(1, &d3dViewport);
+}
+
 // 렌더 타겟뷰를 생성하는 함수
 // 이 함수는 스왑 체인의 첫 번째 후면 버퍼에 대한 렌더 타겟 뷰를 생성하고 디바이스 컨텍스트에 연결한다.
 bool CGameFramework::createRenderTargetView()
@@ -152,6 +166,7 @@ bool CGameFramework::createDirect3DDisplay()
 	dxgiSwapChainDesc.SampleDesc.Count = 1;
 	dxgiSwapChainDesc.SampleDesc.Quality = 0;
 	dxgiSwapChainDesc.Windowed = true;
+	dxgiSwapChainDesc.Flags = 0;
 
 	/*
 	원하는 디바이스 드라이버 유형 순서로 스왑 체인과 디바이스, 디바이스 컨텍스트를 생성하기 위해 드라이버 유형 배열(d3dDriverTypes[])의
@@ -185,6 +200,8 @@ bool CGameFramework::createDirect3DDisplay()
 	if (!createRenderTargetView())
 		return false;
 
+	setViewport();
+
 	return true;
 }
 
@@ -208,6 +225,8 @@ LRESULT CALLBACK CGameFramework::onProcessingWindowMessage(HWND hWnd, UINT nMess
 
 		// 현재 클라이언트 영역의 크기에 맞는 새로운 렌더 타겟 뷰를 생성한다.
 		createRenderTargetView();
+		setViewport();
+
 		break;
 
 	case WM_LBUTTONDOWN:
@@ -318,6 +337,9 @@ void CGameFramework::frameAdvacne()
 
 	// 렌더 타겟 뷰를 색상(RGB: 0.0f, 0.125f, 0.3f)으로 지운다.
 	m_pd3dDeviceContext->ClearRenderTargetView(m_pd3dRenderTargetView, fClearColor);
+
+	if (m_scene)
+		m_scene->render(m_pd3dDeviceContext);
 
 	// 후면 버퍼를 전면 버퍼로 프리젠트한다.
 	m_pDXGISwapChain->Present(0, 0);

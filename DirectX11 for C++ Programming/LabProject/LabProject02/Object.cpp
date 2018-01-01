@@ -52,7 +52,9 @@ void CGameObject::animate(float fTimeElapsed)
 void CGameObject::render(ID3D11DeviceContext* pd3dDeviceContext)
 {
 	if (m_mesh)
+	{		
 		m_mesh->render(pd3dDeviceContext);
+	}
 }
 
 /* CTriangleObject */

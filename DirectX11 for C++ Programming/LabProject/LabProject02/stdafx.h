@@ -21,7 +21,8 @@
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
 #include <d3d11.h>
 #include <d3dx11.h>
-#include <D3dx9math.h>
+#include <D3dx10math.h>
+#include <D3DCompiler.h>
 
 #define FRAME_BUFFER_WIDTH  640
 #define FRAME_BUFFER_HEIGHT 480
