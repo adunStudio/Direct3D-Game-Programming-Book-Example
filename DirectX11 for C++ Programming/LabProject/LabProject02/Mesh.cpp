@@ -57,6 +57,7 @@ void CMesh::setRasterizerState(ID3D11Device* pd3dDevice)
 
 
 /* CTriangleMesh */
+
 CTriangleMesh::CTriangleMesh(ID3D11Device* pd3dDevice)
 {
 

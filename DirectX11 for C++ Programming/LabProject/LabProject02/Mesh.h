@@ -54,3 +54,36 @@ public:
 
 	virtual void setRasterizerState(ID3D11Device* pd3dDevice);
 };
+
+class CDiffusedVertex
+{
+private:
+	D3DXVECTOR3 m_d3dxvPosition;
+
+	// 정점의 상색을 타나내는 멤버 변수(D3DXCOLOR 구조체) 선언
+	D3DXCOLOR m_d3dxcDiffuse;
+
+public:
+	CDiffusedVertex(float x, float y, float z, D3DXCOLOR d3dxcDiffuse)
+	{
+		m_d3dxvPosition = D3DXVECTOR3(x, y, z);
+		m_d3dxcDiffuse = d3dxcDiffuse;
+	}
+
+	CDiffusedVertex(D3DXVECTOR3 d3dxvPosition, D3DXCOLOR d3dxcDiffuse)
+	{
+		m_d3dxvPosition = d3dxvPosition;
+		m_d3dxcDiffuse = d3dxcDiffuse;
+	}
+
+	CDiffusedVertex()
+	{
+		m_d3dxvPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_d3dxcDiffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+
+	~CDiffusedVertex()
+	{
+
+	}
+};
