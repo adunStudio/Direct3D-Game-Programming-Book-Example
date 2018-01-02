@@ -180,7 +180,7 @@ void CObjectShader::createShader(ID3D11Device* pd3dDevice, int nObjects)
 	};
 
 	// DXGI_FORMAT_R32G32B32A32_FLOAT : A four-component, 128-bit floating-point format that supports 32 bits per channel including alpha
-
+	// DXGI_FORMAT_R32G32B32_FLOAT : A three - component, 96 - bit floating - point format that supports 32 bits per color channel.
 	UINT nElements = ARRAYSIZE(d3dInputLayout);
 
 	// Effect.fx 파일에서 정점 셰이더의 시작함수가 VS인 정점 셰이더를 생성한다.

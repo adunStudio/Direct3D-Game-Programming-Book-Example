@@ -19,6 +19,9 @@
 
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
+#include <mmsystem.h>
+#include <math.h>
+
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <D3dx10math.h>
@@ -27,5 +30,6 @@
 #define FRAME_BUFFER_WIDTH  640
 #define FRAME_BUFFER_HEIGHT 480
 
-#include <mmsystem.h>
-#include <math.h>
+// 카메라 변환 행렬과 투영 변환 행렬 그리고 월드 변환 행렬을 위한 상수 버퍼를 연결한 슬롯 번호
+#define VS_SLOT_VIEWPROJECTION_MATRIX 0x00
+#define VS_SLOT_WORDLD_MATRIX         0x01

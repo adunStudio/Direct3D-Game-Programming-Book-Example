@@ -1,0 +1,12 @@
+﻿  stdafx.cpp
+stdafx.cpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject00\stdafx.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject00\targetver.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  LabProject00.cpp
+LabProject00.cpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject00\resource.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  코드를 생성하고 있습니다.
+  All 5 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  LabProject00.vcxproj -> C:\Users\adunstudio\Desktop\Direct3D-Game-Programming-Book-Example\DirectX11 for C++ Programming\LabProject\Release\LabProject00.exe
+  LabProject00.vcxproj -> C:\Users\adunstudio\Desktop\Direct3D-Game-Programming-Book-Example\DirectX11 for C++ Programming\LabProject\Release\LabProject00.pdb (Full PDB)
