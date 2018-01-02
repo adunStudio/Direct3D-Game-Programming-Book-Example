@@ -28,6 +28,9 @@ protected:
 	// 정점 데이터가 어떤 프리미티브를 표현하고 있는지를 나타내는 변수
 	D3D11_PRIMITIVE_TOPOLOGY m_d3dPrimitiveTopology;
 
+	// 래스터라이저 상태 객체에 대한 인터페이스 포인터
+	ID3D11RasterizerState* m_pd3dRasterizerState;
+
 public:
 	CMesh();
 	virtual ~CMesh();
@@ -37,6 +40,8 @@ public:
 
 	// 정점 데이터를 렌더링 하는 멤버 함수
 	virtual void render(ID3D11DeviceContext* pd3dDeviceContext);
+
+	virtual void setRasterizerState(ID3D11Device* pd3dDevice);
 };
 
 class CTriangleMesh : public CMesh
@@ -46,4 +51,6 @@ public:
 	virtual ~CTriangleMesh();
 
 	virtual void render(ID3D11DeviceContext* pd3dDeviceContext);
+
+	virtual void setRasterizerState(ID3D11Device* pd3dDevice);
 };

@@ -72,6 +72,13 @@ CTriangleObject::~CTriangleObject()
 void CTriangleObject::animate(float fTimeElapsed)
 {
 	CGameObject::animate(fTimeElapsed);
+
+	D3DXMATRIX mtxRotate;
+
+	// y축 회전 행렬을 생성하고 월드 변환 행렬에 곱한다.
+	D3DXMatrixRotationY(&mtxRotate, (float)D3DXToRadian(45.0f * fTimeElapsed));
+
+	m_d3dxmtxWorld = mtxRotate * m_d3dxmtxWorld;
 }
 
 void CTriangleObject::render(ID3D11DeviceContext* pd3dDeviceContext)

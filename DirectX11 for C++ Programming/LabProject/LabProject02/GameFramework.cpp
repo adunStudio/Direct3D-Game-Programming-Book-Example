@@ -26,6 +26,9 @@ CGameFramework::CGameFramework()
 	m_scene = nullptr;
 
 	_tcscpy_s(m_pszBuffer, _T("LapProject ("));
+
+	m_nPlayers = 0;
+	m_ppPlayers = nullptr;
 }
 
 CGameFramework::~CGameFramework()
@@ -70,19 +73,6 @@ void CGameFramework::onDestroy()
 	if (m_pd3dDevice)			m_pd3dDevice->Release();
 }
 
-void CGameFramework::setViewport()
-{
-	D3D11_VIEWPORT d3dViewport;
-
-	d3dViewport.TopLeftX = 0.0f;
-	d3dViewport.TopLeftY = 0.0f;
-	d3dViewport.Width  = (float)m_nWndClientWidth;
-	d3dViewport.Height = (float)m_nWndClientHeight;
-	d3dViewport.MinDepth = 0.0f;
-	d3dViewport.MaxDepth = 1.0f;
-	
-	m_pd3dDeviceContext->RSSetViewports(1, &d3dViewport);
-}
 
 // 렌더 타겟뷰를 생성하는 함수
 // 이 함수는 스왑 체인의 첫 번째 후면 버퍼에 대한 렌더 타겟 뷰를 생성하고 디바이스 컨텍스트에 연결한다.
@@ -200,7 +190,6 @@ bool CGameFramework::createDirect3DDisplay()
 	if (!createRenderTargetView())
 		return false;
 
-	setViewport();
 
 	return true;
 }
@@ -208,6 +197,9 @@ bool CGameFramework::createDirect3DDisplay()
 // 윈도우 메시지를 처리한다.
 LRESULT CALLBACK CGameFramework::onProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
+	CCamera* pCamera = m_ppPlayers[0]->getCamera();
+
+
 	switch (nMessageID)
 	{
 	case WM_SIZE:
@@ -225,8 +217,11 @@ LRESULT CALLBACK CGameFramework::onProcessingWindowMessage(HWND hWnd, UINT nMess
 
 		// 현재 클라이언트 영역의 크기에 맞는 새로운 렌더 타겟 뷰를 생성한다.
 		createRenderTargetView();
-		setViewport();
 
+		if (pCamera)
+			pCamera->setViewport(m_pd3dDeviceContext, 0, 0, m_nWndClientWidth, m_nWndClientHeight, 0.0f, 1.0f);
+
+		
 		break;
 
 	case WM_LBUTTONDOWN:
@@ -293,7 +288,31 @@ void CGameFramework::onProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 // 게임 프로그램에서 사용하는 객체들을 생성한다.
 void CGameFramework::buildObjects()
 {
+	// 씬 객체 생성
 	m_scene = new CScene();
+
+	// 플레이어 객체 생성
+	m_nPlayers = 1;
+	m_ppPlayers = new CPlayer*[m_nPlayers];
+	m_ppPlayers[0] = new CPlayer();
+
+	// 카메라 객체 생성, 뷰포트 설정
+	CCamera* camera = new CCamera();
+	camera->createShaderVariables(m_pd3dDevice);
+	camera->setViewport(m_pd3dDeviceContext, 0, 0, m_nWndClientWidth, m_nWndClientHeight, 0.0f, 1.0f);
+
+	// 투영 변환 행렬 생성
+	camera->generateProjectionMatrix(1.0f, 500.0f, float(m_nWndClientWidth) / float(m_nWndClientHeight), 90.0f);
+
+	// 카메라 변환 행렬 생성
+	D3DXVECTOR3 d3dxvEyePosition = D3DXVECTOR3(0.0f, 0.0f, -2.0f);
+	D3DXVECTOR3 d3dxvLookAt      = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 d3dxvUp          = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	camera->generateViewMatrix(d3dxvEyePosition, d3dxvLookAt, d3dxvUp);
+
+	// 카메라 객체를 플레이어 객체에 설정한다.
+	m_ppPlayers[0]->setCamera(camera);
+	m_ppPlayers[0]->createShaderVariables(m_pd3dDevice);
 
 	if (m_scene)
 		m_scene->buildObjects(m_pd3dDevice);
@@ -307,6 +326,15 @@ void CGameFramework::releaseObjects()
 
 	if (m_scene)
 		delete m_scene;
+
+	if (m_ppPlayers)
+	{
+		for (int i = 0; i < m_nPlayers; ++i)
+			if (m_ppPlayers[i])
+				delete m_ppPlayers[i];
+
+		delete[] m_ppPlayers;
+	}
 }
 
 // 사용자 입력(키보드 입력과 마우스 입력)을 처리한다.
@@ -338,8 +366,20 @@ void CGameFramework::frameAdvacne()
 	// 렌더 타겟 뷰를 색상(RGB: 0.0f, 0.125f, 0.3f)으로 지운다.
 	m_pd3dDeviceContext->ClearRenderTargetView(m_pd3dRenderTargetView, fClearColor);
 
+	CCamera* camera = nullptr;
+
+	for (int i = 0; i < m_nPlayers; ++i)
+	{
+
+		if (m_ppPlayers[i])
+		{
+			m_ppPlayers[i]->updateShaderVariables(m_pd3dDeviceContext);
+			camera = m_ppPlayers[i]->getCamera();
+		}
+	}
+		
 	if (m_scene)
-		m_scene->render(m_pd3dDeviceContext);
+		m_scene->render(m_pd3dDeviceContext, camera);
 
 	// 후면 버퍼를 전면 버퍼로 프리젠트한다.
 	m_pDXGISwapChain->Present(0, 0);
@@ -347,6 +387,6 @@ void CGameFramework::frameAdvacne()
 	/*
 	m_pszBuffer 문자열이 "LapProject ("으로 초기화되었으므로 (m_pszBuffer+12)에서부터 프레임 레이트를 문자열로 출력하여 " FPS)" 문자열과 합친다.
 	*/
-	m_gameTimer.getFrameRate(m_pszBuffer + 12, 47);
+	m_gameTimer.getFrameRate(m_pszBuffer + 12, 37);
 	::SetWindowText(m_hWnd, m_pszBuffer); // 현재의 프레임 레이트를 문자열로 가져와서 주 윈도우의 타이틀로 출력한다.
 }

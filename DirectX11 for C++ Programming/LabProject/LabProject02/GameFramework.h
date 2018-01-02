@@ -2,6 +2,7 @@
 
 #include "Timer.h"
 #include "Scene.h"
+#include "Player.h"
 
 class CGameFramework
 {
@@ -69,6 +70,9 @@ private:
 	// 프레임 레이트를 주 윈도우의 캡션에 출력하기 위한 문자열이다.
 	_TCHAR  m_pszBuffer[50];
 
+	int m_nPlayers;
+	CPlayer** m_ppPlayers;
+
 public:
 	CGameFramework();
 	~CGameFramework();
@@ -80,7 +84,6 @@ public:
 	// 주 윈도우가 파괴될 때 호출되는 함수, 이 함수에서 Direct3D와 관련한 해제를 한다.
 	void onDestroy();
 
-	void setViewport();
 
 	// 렌더 타겟뷰를 생성하는 함수
 	// 이 함수는 스왑 체인의 첫 번째 후면 버퍼에 대한 렌더 타겟 뷰를 생성하고 디바이스 컨텍스트에 연결한다.

@@ -117,7 +117,7 @@ void CShader::createPixelShaderFromFile
 }
 
 // CShader 파생 클래스에서 셰이더를 생성하기 위해 호출하는 가상 함수
-void CShader::createShader(ID3D11Device* pd3dDevice)
+void CShader::createShader(ID3D11Device* pd3dDevice, int nObjects)
 {
 
 }
@@ -140,11 +140,28 @@ void CShader::render(ID3D11DeviceContext* pd3dDeviceContext)
 
 }
 
+// 셰이더 클래스의 상수 버퍼를 생성하고 반환하는 함수
+void CShader::createShaderVariables(ID3D11Device* pd3dDevice)
+{
+
+}
+
+void CShader::releaseShaderVariables()
+{
+
+}
+
+// 셰이더 클래스의 상수 버퍼를 갱신하는 멤버 함수
+void CShader::updateShaderVariables(ID3D11DeviceContext* pd3dDeviceContext)
+{
+
+}
 
 /* CObjectShader */
 
 CObjectShader::CObjectShader()
 {
+	m_pd3dcbWorldMatrix = nullptr;
 	m_ppObjects = nullptr;
 	m_nObjects = 0;
 	m_nIndexToAdd = 0;
@@ -158,15 +175,14 @@ CObjectShader::~CObjectShader()
 
 	if (m_ppObjects)
 		delete[] m_ppObjects;
+
+	releaseShaderVariables();
 }
 
 // 셰이더 생성 함수 선언, nObjects는 이 셰이더를 통해 렌더링되는 객체의 개수
 // 정점 셰이더와 입력 레이아웃 객체, 그리고 픽셀 셰이더를 생성
 void CObjectShader::createShader(ID3D11Device* pd3dDevice, int nObjects)
 {
-
-
-
 
 	// 1. 입력 조립 단계에 설정할 입력 레이아웃 객체를 정의한다.
 	//    정점 버퍼의 한 원소가 CVertex 클래스의 멤버 변수(D3DXVECTOR3 즉, 실수 세 개) 이므로 입력 레이아웃 객체는 실수(32비트) 3개로 구성되며
@@ -199,19 +215,63 @@ void CObjectShader::createShader(ID3D11Device* pd3dDevice, int nObjects)
 		for (int i = 0; i < m_nObjects; ++i)
 			m_ppObjects[i] = nullptr;
 	}
+
+	createShaderVariables(pd3dDevice);
+}
+
+
+// 셰이더 클래스의 상수 버퍼를 생성하고 반환하는 함수
+void CObjectShader::createShaderVariables(ID3D11Device* pd3dDevice)
+{
+	// 월드 변환 행렬을 위한 상수 버퍼를 생성한다.
+	CShader::createShaderVariables(pd3dDevice);
+
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DYNAMIC;
+	bd.ByteWidth = sizeof(VS_CB_WORLD_MATRIX);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+
+	pd3dDevice->CreateBuffer(&bd, nullptr, &m_pd3dcbWorldMatrix);
+}
+
+void CObjectShader::releaseShaderVariables()
+{
+	if (m_pd3dcbWorldMatrix)
+		m_pd3dcbWorldMatrix->Release();
+}
+
+// 셰이더 클래스의 상수 버퍼를 갱신하는 멤버 함수
+void CObjectShader::updateShaderVariables(ID3D11DeviceContext* pd3dDeviceContext, D3DXMATRIX* pd3dxmtxWorld)
+{
+	// 월드 변환 행렬을 상수 버퍼에 복사하고, 상수 버퍼를 디바이스의 슬롯(VS_SLOT_WORLD_MATRIX)에 연결한다.
+	CShader::updateShaderVariables(pd3dDeviceContext);
+
+	D3D11_MAPPED_SUBRESOURCE d3dMappedResource;
+
+	pd3dDeviceContext->Map(m_pd3dcbWorldMatrix, 0, D3D11_MAP_WRITE_DISCARD, 0, &d3dMappedResource);
+
+	VS_CB_WORLD_MATRIX* pcbWorldMatrix = (VS_CB_WORLD_MATRIX*)d3dMappedResource.pData;
+
+	D3DXMatrixTranspose(&pcbWorldMatrix->m_d3dxmtxWorld, pd3dxmtxWorld);
+
+	pd3dDeviceContext->Unmap(m_pd3dcbWorldMatrix, 0);
+	pd3dDeviceContext->VSSetConstantBuffers(VS_SLOT_WORDLD_MATRIX, 1, &m_pd3dcbWorldMatrix);
 }
 
 // 렌더링 함수 선언
-void CObjectShader::render(ID3D11DeviceContext* pd3dDeviceContext)
+void CObjectShader::render(ID3D11DeviceContext* pd3dDeviceContext, CCamera* pCamera)
 {
 	CShader::render(pd3dDeviceContext);
 
 	for (int i = 0; i < m_nObjects; ++i)
 	{
 		if (m_ppObjects[i])
+		{
+			updateShaderVariables(pd3dDeviceContext, &m_ppObjects[i]->m_d3dxmtxWorld);
 			m_ppObjects[i]->render(pd3dDeviceContext);
-		
-
+		}
 	}
 }
 

@@ -47,7 +47,7 @@ void CCamera::generateProjectionMatrix(float fNearPlaneDistance, float fFrarPlan
 void CCamera::createShaderVariables(ID3D11Device* pd3dDevice)
 {
 	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
+	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DYNAMIC;
 	bd.ByteWidth = sizeof(VS_CB_VIEWPROJECTION_MATRIX);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -61,6 +61,7 @@ void CCamera::createShaderVariables(ID3D11Device* pd3dDevice)
 // 상수 버퍼의 메모리 주소를 가져와서 카메라 변환 행렬과 투영 변환 행렬을 복사한다.
 void CCamera::updateSHaderVariables(ID3D11DeviceContext* pd3dDeviceContext)
 {
+
 	// 서브 리소스 데이터에 접근하기 위한 구조체
 	// pData 데이터에 대한 포인터
 	D3D11_MAPPED_SUBRESOURCE d3dMappedResource;
@@ -78,5 +79,5 @@ void CCamera::updateSHaderVariables(ID3D11DeviceContext* pd3dDeviceContext)
 	pd3dDeviceContext->Unmap(m_pd3dcbViewProjection, 0);
 
 	// 상수 버퍼 슬롯(VS_SLOT_VIEWPROJECTION_MATRIX)에 설정한다.
-	pd3dDeviceContext->VSGetConstantBuffers(VS_SLOT_VIEWPROJECTION_MATRIX, 1, &m_pd3dcbViewProjection);
+	pd3dDeviceContext->VSSetConstantBuffers(VS_SLOT_VIEWPROJECTION_MATRIX, 1, &m_pd3dcbViewProjection);
 }

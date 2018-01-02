@@ -2,6 +2,7 @@
 
 #include "Object.h"
 #include "Shader.h"
+#include "Camera.h"
 
 class CScene
 {
@@ -24,6 +25,6 @@ public:
 	void releaseObjects();
 	bool processInput();
 	void animateObjects(float timeElapsed);
-	void render(ID3D11DeviceContext* pd3dDeviceContext);
+	void render(ID3D11DeviceContext* pd3dDeviceContext, CCamera* camera = nullptr);
 };
 

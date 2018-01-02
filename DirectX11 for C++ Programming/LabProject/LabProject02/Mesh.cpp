@@ -8,13 +8,16 @@ CMesh::CMesh()
 	m_offset = 0;
 	m_d3dPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	m_references = 1;
+	m_pd3dRasterizerState = nullptr;
 }
 
 CMesh::~CMesh()
 {
-
 	if (m_pd3dVertexBuffer)
 		m_pd3dVertexBuffer->Release();
+
+	if (m_pd3dRasterizerState)
+		m_pd3dRasterizerState->Release();
 }
 
 void CMesh::addRef()
@@ -34,13 +37,24 @@ void CMesh::render(ID3D11DeviceContext* pd3dDeviceContext)
 {
 	if (m_pd3dVertexBuffer)
 	{
-
 		pd3dDeviceContext->IASetVertexBuffers(0, 1, &m_pd3dVertexBuffer, &m_stride, &m_offset);
 	}
 
 	pd3dDeviceContext->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+
+	// 래스터라이저 상태를 디바이스 컨텍스트에 설정한다.
+	if (m_pd3dRasterizerState)
+		pd3dDeviceContext->RSSetState(m_pd3dRasterizerState);
+
+
 	pd3dDeviceContext->Draw(m_vertices, m_offset);
 }
+
+void CMesh::setRasterizerState(ID3D11Device* pd3dDevice)
+{
+
+}
+
 
 /* CTriangleMesh */
 CTriangleMesh::CTriangleMesh(ID3D11Device* pd3dDevice)
@@ -71,6 +85,8 @@ CTriangleMesh::CTriangleMesh(ID3D11Device* pd3dDevice)
 	d3dBufferData.pSysMem = pVertices;
 
 	pd3dDevice->CreateBuffer(&d3dBufferDesc, &d3dBufferData, &m_pd3dVertexBuffer);
+
+	setRasterizerState(pd3dDevice);
 }
 
 CTriangleMesh::~CTriangleMesh()
@@ -80,4 +96,16 @@ CTriangleMesh::~CTriangleMesh()
 void CTriangleMesh::render(ID3D11DeviceContext* pd3dDeviceContext)
 {
 	CMesh::render(pd3dDeviceContext);
+}
+
+void CTriangleMesh::setRasterizerState(ID3D11Device* pd3dDevice)
+{
+	D3D11_RASTERIZER_DESC d3dRasterizerDesc;
+	ZeroMemory(&d3dRasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+
+	// 래스터라이저 단계에서 컬링(은면 제거)을 하지 않도록 래스터라이저 상태를 생성한다.
+	d3dRasterizerDesc.CullMode = D3D11_CULL_NONE;
+	d3dRasterizerDesc.FillMode = D3D11_FILL_SOLID;
+
+	pd3dDevice->CreateRasterizerState(&d3dRasterizerDesc, &m_pd3dRasterizerState);
 }

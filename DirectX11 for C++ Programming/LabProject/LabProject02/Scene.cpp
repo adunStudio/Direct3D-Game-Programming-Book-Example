@@ -88,13 +88,14 @@ bool CScene::processInput()
 
 void CScene::animateObjects(float timeElapsed)
 {
-
+	for (int i = 0; i < m_nObjects; ++i)
+		m_ppObjects[i]->animate(timeElapsed);
 }
 
-void CScene::render(ID3D11DeviceContext* pd3dDeviceContext)
+void CScene::render(ID3D11DeviceContext* pd3dDeviceContext, CCamera* camera)
 {
 	for (int i = 0; i < m_nShaders; ++i)
 	{
-		m_ppShaders[i]->render(pd3dDeviceContext);
+		m_ppShaders[i]->render(pd3dDeviceContext, camera);
 	}
 }
