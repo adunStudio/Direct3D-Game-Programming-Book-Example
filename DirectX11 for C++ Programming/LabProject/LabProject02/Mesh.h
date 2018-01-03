@@ -31,6 +31,17 @@ protected:
 
 	// 래스터라이저 상태 객체에 대한 인터페이스 포인터
 	ID3D11RasterizerState* m_pd3dRasterizerState;
+	
+	/* 인덱스 버퍼는 정점 버퍼(배열)에 대한 인덱스를 가진다. */
+
+	// 인덱스 버퍼(인덱스의 배열)에 대한 인터페이스 포인터
+	ID3D11Buffer* m_pd3dIndexBuffer;
+
+	UINT m_indices;     // 인덱스 버퍼가 포함하는 인덱스의 개수
+	UINT m_startIndex;  // 인덱스 버퍼에서 메시를 표현하기 위해 사용되는 시작 인덱스
+	
+	int m_baseVertex;   // 각 인덱스에 더해질 인덱스
+
 
 public:
 	CMesh();
