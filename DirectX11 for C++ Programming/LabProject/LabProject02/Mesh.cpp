@@ -59,19 +59,20 @@ void CMesh::setRasterizerState(ID3D11Device* pd3dDevice)
 /* CTriangleMesh */
 
 CTriangleMesh::CTriangleMesh(ID3D11Device* pd3dDevice)
+
 {
 
 	// 3. 정점 버퍼의 원소 개수, 정점의 바이트 크기, 프리미티브 유형을 지정한다.
 	m_vertices = 3;
-	m_stride = sizeof(CVertex);
+	m_stride = sizeof(CDiffusedVertex);
 	m_offset = 0;
 	m_d3dPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	// 1. 삼각형의 세 꼭짓점의 위치 벡터를 정의한다. (시계 방향)
-	CVertex pVertices[3];
-	pVertices[0] = CVertex(D3DXVECTOR3( 0.0f,  0.5f, 0.0f));
-	pVertices[1] = CVertex(D3DXVECTOR3( 0.5f, -0.5f, 0.0f));
-	pVertices[2] = CVertex(D3DXVECTOR3(-0.5f, -0.5f, 0.0f));
+	CDiffusedVertex pVertices[3];
+	pVertices[0] = CDiffusedVertex(D3DXVECTOR3( 0.0f,  0.5f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+	pVertices[1] = CDiffusedVertex(D3DXVECTOR3( 0.5f, -0.5f, 0.0f), D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
+	pVertices[2] = CDiffusedVertex(D3DXVECTOR3(-0.5f, -0.5f, 0.0f), D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 
 	// 2. 정점 버퍼를 생성한다.
 	D3D11_BUFFER_DESC d3dBufferDesc;
@@ -106,6 +107,114 @@ void CTriangleMesh::setRasterizerState(ID3D11Device* pd3dDevice)
 
 	// 래스터라이저 단계에서 컬링(은면 제거)을 하지 않도록 래스터라이저 상태를 생성한다.
 	d3dRasterizerDesc.CullMode = D3D11_CULL_NONE;
+	d3dRasterizerDesc.FillMode = D3D11_FILL_SOLID;
+
+	pd3dDevice->CreateRasterizerState(&d3dRasterizerDesc, &m_pd3dRasterizerState);
+}
+
+/* CCubeMesh */
+
+CCubeMesh::CCubeMesh(ID3D11Device* pd3dDevice, float fWidth, float fHeight, float fDepth)
+{
+	// 3. 정점 버퍼의 원소 개수, 정점의 바이트 크기, 프리미티브 유형을 지정한다.
+	m_vertices = 6 * 2 * 3;
+	m_stride = sizeof(CDiffusedVertex);
+	m_offset = 0;
+	m_d3dPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	// 1. 삼각형의 세 꼭짓점의 위치 벡터를 정의한다. (시계 방향)
+
+	float fx = fWidth  * 0.5f;
+	float fy = fHeight * 0.5f;
+	float fz = fDepth  * 0.5f;
+
+	CDiffusedVertex pVertices[36];
+	// 정점 버퍼 데이터는 삼강형 리스트이므로 36개의 정점 데이터를 준비한다.
+	
+	int i = 0;
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, -fy, -fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, -fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, -fy, -fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, +fy, -fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, +fy, -fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, -fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, -fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, +fy, +fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, -fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, +fy, +fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, -fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, -fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, -fy, +fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, -fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, -fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, -fy, +fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, -fy, -fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, -fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(-fx, -fy, +fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, +fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, -fy, +fz), RANDOM_COLOR);
+
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, +fy, -fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, -fy, +fz), RANDOM_COLOR);
+	pVertices[i++] = CDiffusedVertex(D3DXVECTOR3(+fx, -fy, -fz), RANDOM_COLOR);
+
+	// 2. 정점 버퍼를 생성한다.
+	D3D11_BUFFER_DESC d3dBufferDesc;
+	ZeroMemory(&d3dBufferDesc, sizeof(D3D11_BUFFER_DESC));
+	d3dBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	d3dBufferDesc.ByteWidth = m_stride * m_vertices;
+	d3dBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	d3dBufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA d3dBufferData;
+	ZeroMemory(&d3dBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
+	d3dBufferData.pSysMem = pVertices;
+
+	pd3dDevice->CreateBuffer(&d3dBufferDesc, &d3dBufferData, &m_pd3dVertexBuffer);
+
+	setRasterizerState(pd3dDevice);
+}
+
+CCubeMesh:: ~CCubeMesh()
+{
+
+}
+
+void CCubeMesh::render(ID3D11DeviceContext* pd3dDeviceContext)
+{
+	CMesh::render(pd3dDeviceContext);
+}
+
+void CCubeMesh::setRasterizerState(ID3D11Device* pd3dDevice)
+{
+	D3D11_RASTERIZER_DESC d3dRasterizerDesc;
+	ZeroMemory(&d3dRasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+
+	// 래스터라이저 단계에서 컬링(은면 제거)을 하지 않도록 래스터라이저 상태를 생성한다.
+	//d3dRasterizerDesc.CullMode = D3D11_CULL_NONE;
 	d3dRasterizerDesc.FillMode = D3D11_FILL_SOLID;
 
 	pd3dDevice->CreateRasterizerState(&d3dRasterizerDesc, &m_pd3dRasterizerState);

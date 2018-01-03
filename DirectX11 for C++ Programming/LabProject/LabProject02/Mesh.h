@@ -9,6 +9,7 @@ public:
 	~CVertex() { }
 };
 
+#define RANDOM_COLOR D3DXCOLOR((rand() * 0xFFFFFF) / RAND_MAX)
 
 // 삼각형을 하나의 메시로 표현하고 렌더링하기 위한 클래스
 class CMesh
@@ -86,4 +87,15 @@ public:
 	{
 
 	}
+};
+
+class CCubeMesh : public CMesh
+{
+public:
+	CCubeMesh(ID3D11Device* pd3dDevice, float fWidth = 2.0f, float fHeight = 2.0f, float fDepth = 2.0f);
+	virtual ~CCubeMesh();
+
+	virtual void render(ID3D11DeviceContext* pd3dDeviceContext);
+
+	virtual void setRasterizerState(ID3D11Device* pd3dDevice);
 };

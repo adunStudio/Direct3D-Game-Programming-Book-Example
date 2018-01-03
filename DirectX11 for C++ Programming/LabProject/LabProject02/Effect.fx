@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------
-// File: LabProject05-1.fx
+// File: LabProject05-2.fx
 //--------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------
@@ -17,20 +17,28 @@ cbuffer cbWorldMatrix : register(b1)
 };
 
 //--------------------------------------------------------------------------------------
+struct VS_INPUT
+{
+	float4 position : POSITION;
+	float4 color : COLOR;
+};
+
 struct VS_OUTPUT
 {
 	float4 position : SV_POSITION;
+	float4 color : COLOR0;
 };
 
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
-VS_OUTPUT VS(float4 position : POSITION)
+VS_OUTPUT VS(VS_INPUT input)
 {
 	VS_OUTPUT output = (VS_OUTPUT)0;
-	output.position = mul(position, gmtxWorld);
+	output.position = mul(input.position, gmtxWorld);
 	output.position = mul(output.position, gmtxView);
 	output.position = mul(output.position, gmtxProjection);
+	output.color = input.color;
 	return output;
 }
 
@@ -39,6 +47,6 @@ VS_OUTPUT VS(float4 position : POSITION)
 //--------------------------------------------------------------------------------------
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-	return float4(1.0f, 1.0f, 0.0f, 1.0f);    // Yellow, with Alpha = 1
+	return input.color;
 }
 

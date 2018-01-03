@@ -43,7 +43,10 @@ void CScene::buildObjects(ID3D11Device* pd3dDevice)
 	m_ppObjects = new CGameObject*[m_nObjects];
 
 	// 삼각형 메시(TriangleMesh)를 생성한다.
-	CTriangleMesh* pMesh = new CTriangleMesh(pd3dDevice);
+	//CTriangleMesh* pMesh = new CTriangleMesh(pd3dDevice);
+
+	// 정육면체 메시(CubeMesh)를 생성한다.
+	CCubeMesh* pMesh = new CCubeMesh(pd3dDevice, 1.0f, 1.0f, 1.0f);
 
 	// 삼각형 객체(CTriangleObject)를 생성하고 삼각형 메시를 연결한다.
 	CTriangleObject* pObject = new CTriangleObject();
