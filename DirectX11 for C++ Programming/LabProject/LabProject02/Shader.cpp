@@ -289,3 +289,32 @@ void CObjectShader::addObject(CGameObject* object)
 	if (object)
 		object->addRef();
 }
+
+
+
+void CDiffusedShader::createShader(ID3D11Device *pd3dDevice)
+{
+	D3D11_INPUT_ELEMENT_DESC d3dInputLayout[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+	UINT nElements = ARRAYSIZE(d3dInputLayout);
+	createVertexShaderFromFile(pd3dDevice, L"Effect.fx", "VSDiffusedColor", "vs_4_0", &m_pd3dVertexShader, d3dInputLayout, nElements, &m_pd3dVertexLayout);
+	createPixelShaderFromFile(pd3dDevice, L"Effect.fx", "PSDiffusedColor", "ps_4_0", &m_pd3dPixelShader);
+}
+
+void CDiffusedShader::createShaderVariables(ID3D11Device *pd3dDevice)
+{
+	CShader::createShaderVariables(pd3dDevice);
+}
+
+void CDiffusedShader::updateShaderVariables(ID3D11DeviceContext *pd3dDeviceContext)
+{
+	CShader::updateShaderVariables(pd3dDeviceContext);
+}
+
+void CDiffusedShader::render(ID3D11DeviceContext *pd3dDeviceContext)
+{
+	CShader::render(pd3dDeviceContext);
+}

@@ -1,8 +1,37 @@
-﻿  Mesh.cpp
-  코드를 생성하고 있습니다.
-  1 of 117 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
-  코드를 생성했습니다.
-  LabProject02.vcxproj -> C:\Users\adunstudio\Desktop\Direct3D-Game-Programming-Book-Example\DirectX11 for C++ Programming\LabProject\Release\LabProject02.exe
-  LabProject02.vcxproj -> C:\Users\adunstudio\Desktop\Direct3D-Game-Programming-Book-Example\DirectX11 for C++ Programming\LabProject\Release\LabProject02.pdb (Full PDB)
+﻿  Camera.cpp
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+  Player.cpp
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+Player.cpp(314): error C2065: 'm_pShader': 선언되지 않은 식별자입니다.
+Player.cpp(316): error C2065: 'm_pShader': 선언되지 않은 식별자입니다.
+Player.cpp(316): error C2227: '->updateShaderVariables' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
+  Player.cpp(316): note: 'unknown-type' 형식입니다.
+Player.cpp(317): error C2065: 'm_pShader': 선언되지 않은 식별자입니다.
+Player.cpp(317): error C2227: '->render' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
+  Player.cpp(317): note: 'unknown-type' 형식입니다.
+Player.cpp(340): error C2061: 구문 오류: 식별자 'CAirPlaneMesh'
+Player.cpp(344): error C2065: 'm_pShader': 선언되지 않은 식별자입니다.
+Player.cpp(344): error C2061: 구문 오류: 식별자 'CPlayerShader'
+Player.cpp(345): error C2065: 'm_pShader': 선언되지 않은 식별자입니다.
+Player.cpp(345): error C2227: '->createShader' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
+  Player.cpp(345): note: 'unknown-type' 형식입니다.
+Player.cpp(346): error C2065: 'm_pShader': 선언되지 않은 식별자입니다.
+Player.cpp(346): error C2227: '->createShaderVariables' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
+  Player.cpp(346): note: 'unknown-type' 형식입니다.
+Player.cpp(354): error C2065: 'm_pShader': 선언되지 않은 식별자입니다.
+Player.cpp(355): error C2065: 'm_pShader': 선언되지 않은 식별자입니다.
+Player.cpp(355): error C2541: 'delete': 포인터가 아닌 개체를 삭제할 수 없습니다.
+  GameFramework.cpp
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+  LabProject02.cpp
+LabProject02.cpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\resource.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\adunstudio\desktop\direct3d-game-programming-book-example\directx11 for c++ programming\labproject\labproject02\Player.h(14): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.

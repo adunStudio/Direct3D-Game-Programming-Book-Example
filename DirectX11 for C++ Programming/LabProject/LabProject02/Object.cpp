@@ -57,28 +57,76 @@ void CGameObject::render(ID3D11DeviceContext* pd3dDeviceContext)
 	}
 }
 
+// 객체의 위치를 설정한다.
+void CGameObject::setPosition(float x, float y, float z)
+{
+	m_d3dxmtxWorld._41 = x;
+	m_d3dxmtxWorld._42 = y;
+	m_d3dxmtxWorld._43 = z;
+}
+
+void CGameObject::setPosition(D3DXVECTOR3 d3dxvPosition)
+{
+	m_d3dxmtxWorld._41 = d3dxvPosition.x;
+	m_d3dxmtxWorld._42 = d3dxvPosition.y;
+	m_d3dxmtxWorld._43 = d3dxvPosition.z;
+}
+
+// 로컬 x 축 방향으로 이동한다.
+void CGameObject::moveStrafe(float fDistance)
+{
+	D3DXVECTOR3 d3dxvPosition = getPosition();
+	D3DXVECTOR3 d3dxvRight = getRight();
+	d3dxvPosition += fDistance * d3dxvRight;
+	CGameObject::setPosition(d3dxvPosition);
+}
+// 로컬 y 축 방향으로 이동한다.
+void CGameObject::moveUp(float fDistance)
+{
+	D3DXVECTOR3 d3dxvPosition = getPosition();
+	D3DXVECTOR3 d3dxvUp = getUp();
+	d3dxvPosition += fDistance * d3dxvUp;
+	CGameObject::setPosition(d3dxvPosition);
+}
+// 로컬 z 축 방향으로 이동한다.
+void CGameObject::moveForward(float fDistance)
+{
+	D3DXVECTOR3 d3dxvPosition = getPosition();
+	D3DXVECTOR3 d3dxvLookAt = getLookAt();
+	d3dxvPosition += fDistance * d3dxvLookAt;
+	CGameObject::setPosition(d3dxvPosition);
+}
+
+// 로컬 x, y, z 축으로 회전한다.
+void CGameObject::rotate(float fPitch, float fYaw, float fRoll)
+{
+	D3DXMATRIX mtxRotate;
+	D3DXMatrixRotationYawPitchRoll(&mtxRotate, (float)D3DXToRadian(fYaw), (float)D3DXToRadian(fPitch), (float)D3DXToRadian(fRoll));
+	m_d3dxmtxWorld = mtxRotate * m_d3dxmtxWorld;
+}
+void CGameObject::rotate(D3DXVECTOR3* pd3dxvAxis, float fAngle)
+{
+	D3DXMATRIX mtxRotate;
+	D3DXMatrixRotationAxis(&mtxRotate, pd3dxvAxis, (float)D3DXToRadian(fAngle));
+	m_d3dxmtxWorld = mtxRotate * m_d3dxmtxWorld;
+}
+
+
+
 /* CTriangleObject */
 
 CTriangleObject::CTriangleObject()
 {
-
+	m_fRotationSpeed = 15.0f;
 }
 
 CTriangleObject::~CTriangleObject()
 {
-
 }
 
 void CTriangleObject::animate(float fTimeElapsed)
 {
-	CGameObject::animate(fTimeElapsed);
-
-	D3DXMATRIX mtxRotate;
-
-	// y축 회전 행렬을 생성하고 월드 변환 행렬에 곱한다.
-	D3DXMatrixRotationY(&mtxRotate, (float)D3DXToRadian(45.0f * fTimeElapsed));
-
-	m_d3dxmtxWorld = mtxRotate * m_d3dxmtxWorld;
+	CGameObject::rotate(&m_d3dxvRotationAxis, m_fRotationSpeed * fTimeElapsed);
 }
 
 void CTriangleObject::render(ID3D11DeviceContext* pd3dDeviceContext)

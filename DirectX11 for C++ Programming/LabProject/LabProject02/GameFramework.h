@@ -60,6 +60,9 @@ private:
 
 	// 렌더 타깃 뷰 인터페이스에 대한 포인터이다.
 	ID3D11RenderTargetView* m_pd3dRenderTargetView;
+	ID3D11Texture2D* m_pd3dDepthStencilBuffer;
+	ID3D11DepthStencilView* m_pd3dDepthStencilView;
+
 
 	// 게임 프레임워크에서 사용할 타이머다.
 	CGameTimer m_gameTimer;
@@ -72,6 +75,8 @@ private:
 
 	int m_nPlayers;
 	CPlayer** m_ppPlayers;
+
+	POINT m_ptOldCursorPos;
 
 public:
 	CGameFramework();
@@ -88,7 +93,8 @@ public:
 	// 렌더 타겟뷰를 생성하는 함수
 	// 이 함수는 스왑 체인의 첫 번째 후면 버퍼에 대한 렌더 타겟 뷰를 생성하고 디바이스 컨텍스트에 연결한다.
 	bool createRenderTargetView();
-	
+	bool createRenderTargetDepthStencilView();
+
 	// Direct3D와 관련한 초기화(디바이스 생성 등)를 하는 함수, onCreate() 함수에서 호출된다.
 	// Direct3D 디바이스를 생성하면서 스왑 체인, 디바이스 컨텍스트, 렌더 타겟 뷰를 생성하고 설정한다.
 	bool createDirect3DDisplay();

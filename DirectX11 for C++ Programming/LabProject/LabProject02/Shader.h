@@ -91,3 +91,22 @@ public:
 	// 셰이더에서 렌더링할 게임 객체를 추가하는 함수
 	void addObject(CGameObject* object);
 };
+
+class CDiffusedShader : public CShader
+{
+public:
+	CDiffusedShader();
+	virtual ~CDiffusedShader();
+
+	virtual void createShader(ID3D11Device *pd3dDevice);
+	virtual void createShaderVariables(ID3D11Device *pd3dDevice);
+	virtual void cpdateShaderVariables(ID3D11DeviceContext *pd3dDeviceContext);
+	virtual void updateShaderVariables(ID3D11DeviceContext* pd3dDeviceContext);
+
+	virtual void render(ID3D11DeviceContext *pd3dDeviceContext);
+};
+
+class CPlayerShader : public CDiffusedShader
+{
+
+};
